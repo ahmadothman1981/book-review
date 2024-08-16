@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Install PHP
+apt-get update && apt-get install -y php8.1 php8.1-cli php8.1-common php8.1-curl php8.1-mbstring php8.1-mysql php8.1-xml
+
 # Install Composer
 EXPECTED_CHECKSUM="$(php -r 'copy("https://composer.github.io/installer.sig", "php://stdout");')"
 php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"

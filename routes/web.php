@@ -26,11 +26,3 @@ Route::resource('books.reviews', ReviewController::class)
     ->only(['create', 'store']);
 //book review
 
-Route::get('/db-test', function () {
-    try {
-        DB::connection()->getPdo();
-        return 'Database connection is working!';
-    } catch (\Exception $e) {
-        return 'Could not connect to the database. Please check your configuration.';
-    }
-});

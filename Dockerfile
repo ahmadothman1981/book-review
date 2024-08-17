@@ -1,39 +1,20 @@
-FROM php:8.3-apache
+FROM richarvey/nginx-php-fpm:1.7.2
 
-# Install dependencies
-RUN apt-get update && apt-get install -y \
-    libpng-dev \
-    zlib1g-dev \
-    libxml2-dev \
-    libzip-dev \
-    libonig-dev \
-    zip \
-    curl \
-    unzip
+COPY . .
 
-# Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath gd
+# Image config
+ENV SKIP_COMPOSER 1
+ENV WEBROOT /var/www/html/public
+ENV PHP_ERRORS_STDERR 1
+ENV RUN_SCRIPTS 1
+ENV REAL_IP_HEADER 1
 
-# Enable Apache modules
-RUN a2enmod rewrite
+# Laravel config
+ENV APP_ENV production
+ENV APP_DEBUG false
+ENV LOG_CHANNEL stderr
 
-# Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# Allow composer to run as root
+ENV COMPOSER_ALLOW_SUPERUSER 1
 
-# Copy Laravel project files
-COPY . /var/www/html
-
-# Set working directory
-WORKDIR /var/www/html
-
-# Install Laravel dependencies
-RUN composer install --no-dev --optimize-autoloader
-
-# Configure Apache
-COPY docker/000-default.conf /etc/apache2/sites-available/000-default.conf
-
-# Expose port 80
-EXPOSE 80
-
-# Start Apache
-CMD ["apache2-foreground"]
+CMD ["/start.sh"]

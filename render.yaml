@@ -18,3 +18,5 @@ services:
         value: root
       - key: DB_PASSWORD
         value: 
+
+         initialDeployHook: ./seed_database.sh

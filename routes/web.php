@@ -1,9 +1,10 @@
 <?php
 
-use Illuminate\Database\Eloquent\Attributes\ScopedBy;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\ReviewController;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,3 +25,12 @@ Route::resource('books.reviews', ReviewController::class)
     ->scoped(['review' => 'book'])
     ->only(['create', 'store']);
 //book review
+
+Route::get('/db-test', function () {
+    try {
+        DB::connection()->getPdo();
+        return 'Database connection is working!';
+    } catch (\Exception $e) {
+        return 'Could not connect to the database. Please check your configuration.';
+    }
+});
